@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Something went wrong — My DevOps Life</title>
+  <meta name="description" content="Custom error page for My DevOps Life." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%235f67ee' d='M10 50L28 8l8 18 18 8-42 16z'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #11182a;
+      --muted: #8ea0c2;
+      --text: #e7ecf7;
+      --brand: #6366f1;
+      --brand-2: #22d3ee;
+      --border: #1f2a44;
+      --ok: #10b981;
+      --warn: #f59e0b;
+      --err: #ef4444;
+    }
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body {
+      margin: 0;
+      font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at 10% -10%, rgba(34,211,238,.07), transparent 60%),
+        radial-gradient(700px 380px at 110% 0%, rgba(99,102,241,.08), transparent 40%),
+        var(--bg);
+      display: grid; place-items: center;
+    }
+    main {
+      width: 100%;
+      max-width: 720px;
+      padding: 28px;
+      text-align: center;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 20px 60px rgba(2,8,23,.35);
+    }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 0 0 10px }
+    p.lead { color: var(--muted); margin: 0 0 18px }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace }
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .7rem 1rem; border-radius: 9999px;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      color: white; font-weight: 600; border: 0; cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(34,211,238,.15), 0 6px 16px rgba(99,102,241,.18);
+    }
+    .btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--text) }
+    .row { display:flex; justify-content:center; gap:12px; flex-wrap: wrap; margin-top: 14px }
+    .tips { text-align:left; margin: 18px auto 0; max-width: 560px; color: var(--muted) }
+    .tips li { margin: 6px 0 }
+    .code {
+      background: #0d1526; border:1px solid var(--border); color: var(--muted);
+      border-radius: 12px; padding: .6rem .8rem; font-size: .92rem;
+      overflow-x: auto;
+    }
+    .logo { font-weight: 800; letter-spacing: .2px; color: var(--text); text-decoration:none }
+    .logo span { color: var(--brand-2) }
+    footer { margin-top: 18px; color: var(--muted); font-size: .9rem }
+    svg.icon { width: 22px; height: 22px; vertical-align: -4px }
+  </style>
+</head>
+<body>
+  <main>
+    <a href="/" class="logo">my<span>devops</span>life</a>
+    <div class="card" role="alert" aria-live="polite">
+      <svg aria-hidden="true" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="10" stroke-width="2" opacity=".35"></circle>
+        <path stroke-width="2" d="M12 7v6m0 4h.01"></path>
+      </svg>
+      <h1>Oops — something went wrong.</h1>
+      <p class="lead">The page you requested may have moved, or it isn’t available right now.</p>
+      <div class="row">
+        <a class="btn" href="/">Go to Homepage</a>
+        <a class="btn secondary" href="mailto:hadianoor16@gmail.com">Report this</a>
+      </div>
+
+      <div class="tips">
+        <ul>
+          <li>If you typed the URL, check the spelling.</li>
+          <li>If you clicked a link, it may be out of date.</li>
+          <li>Try again in a moment, or head back to the homepage.</li>
+        </ul>
+      </div>
+    </div>
+
+    <footer>© <span id="year"></span> My DevOps Life</footer>
+  </main>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
