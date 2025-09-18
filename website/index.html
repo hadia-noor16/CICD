@@ -1,187 +1,256 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>HealthCare Hospital</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            text-align: center;
-            color: #333;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-        }
-        header {
-            background: #50b3a2;
-            color: white;
-            padding-top: 30px;
-            min-height: 70px;
-            border-bottom: #e8491d 3px solid;
-            position: fixed; /* Make header sticky */
-            width: 100%;
-            top: 0;
-            z-index: 1000; /* Ensure header is above other content */
-        }
-        header a {
-            color: #ffffff;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 20px;
-        }
-        header ul {
-            padding: 0;
-            margin: 0;
-            list-style: none;
-            overflow: hidden;
-        }
-        header li {
-            float: left;
-            display: inline;
-            padding: 0 20px 0 20px;
-            font-size:2.5em;
-        }
-        header #branding {
-            float: left;
-        }
-        header #branding h1 {
-            margin: 0;
-            font-size: 2.8em;
-        }
-        header nav {
-            float: right;
-            margin-top: 10px;
-        }
-        header .highlight, header .current a {
-            color: #e8491d;
-            font-weight: bold;
-        }
-        header a:hover {
-            color: #ffffff;
-            font-weight: bold;
-        }
-        .section {
-            padding: 50px 0;
-            text-align: center;
-            margin-top: 80px; /* Add top margin to account for sticky header */
-        }
-        .section h1 {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-        }
-        .section p {
-            font-size: 2.8em;
-        }
-        .section ul {
-            padding: 0;
-            margin: 0;
-            list-style: none; /* Remove default list styling */
-        }
-        .section li {
-            font-size: 1.5em; /* Adjust the font size to be more proportionate */
-            text-align: left; /* Align the text to the left */
-            list-style-position: inside; /* Position the bullets inside the content flow */
-            list-style-type: disc; /* Add bullet styling */
-            margin: 10px 0; /* Add some space between list items */
-        }
-        .section-content {
-            text-align: left;
-            margin: 20px auto;
-            width: 70%;
-        }
-        .section-image {
-            width: 100%;
-            height: auto;
-            margin-bottom: 20px;
-        }
-        button {
-            padding: 15px 30px;
-            font-size: 1.5em;
-            color: #fff;
-            background-color: #50b3a2;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        button:hover {
-            background-color: #429388;
-        }
-        /* Add image placeholders */
-        .home-image, .services-image, .about-image, .contact-image {
-            background: url('path_to_your_image.jpg') no-repeat center center;
-            background-size: cover;
-            height: 300px; /* Adjust as needed */
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My DevOps Life — Cloud · Infra · Automation</title>
+  <meta name="description" content="Portfolio of Hadia Noor — DevOps & Cloud engineer. Terraform, Docker, Kubernetes, CI/CD on AWS & Azure." />
+  <meta property="og:title" content="My DevOps Life — Cloud · Infra · Automation">
+  <meta property="og:description" content="Terraform, Docker, Kubernetes, CI/CD on AWS & Azure. Projects, tips, and contact.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mydevopslife.com/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%235f67ee' d='M10 50L28 8l8 18 18 8-42 16z'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #11182a;
+      --muted: #8ea0c2;
+      --text: #e7ecf7;
+      --brand: #6366f1;
+      --brand-2: #22d3ee;
+      --ring: rgba(99,102,241,.35);
+      --border: #1f2a44;
+      --ok: #10b981;
+      --warn: #f59e0b;
+      --err: #ef4444;
+    }
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body {
+      margin: 0;
+      font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 10% -10%, rgba(34,211,238,.07), transparent 60%),
+                  radial-gradient(800px 400px at 110% 0%, rgba(99,102,241,.08), transparent 40%),
+                  var(--bg);
+    }
+    a { color: inherit; text-decoration: none }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 20px }
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .75rem 1rem; border-radius: 9999px;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      color: white; font-weight: 600; border: 0; cursor: pointer;
+      box-shadow: 0 10px 30px rgba(34,211,238,.15), 0 6px 16px rgba(99,102,241,.18);
+    }
+    .btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--text) }
+    .chip { display:inline-block; padding:.35rem .6rem; border:1px solid var(--border); border-radius: 9999px; color: var(--muted); font-size: .85rem }
+    header.nav {
+      position: sticky; top: 0; z-index: 30;
+      backdrop-filter: blur(8px); background: rgba(11,18,32,.55);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { display:flex; align-items:center; justify-content:space-between; height:64px }
+    .brand { font-weight: 800; letter-spacing: .2px }
+    .brand span { color: var(--brand-2) }
+    nav a { color: var(--muted); margin-left: 20px }
+    nav a:hover { color: white }
+    .hero { padding: 72px 0 32px }
+    .grid { display: grid; gap: 28px }
+    @media (min-width: 960px) { .grid-2 { grid-template-columns: 1.2fr 1fr } }
+    h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; margin: 0 0 14px }
+    h2 { font-size: clamp(1.4rem, 3vw, 2rem); margin: 0 0 14px }
+    p.lead { color: var(--muted); font-size: 1.05rem; margin: 0 0 18px }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
+      border: 1px solid var(--border);
+      border-radius: 18px; padding: 20px;
+    }
+    .stack { display:flex; flex-wrap: wrap; gap: 10px }
+    .kpis { display:grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px }
+    .kpi { background: #0d1526; border:1px solid var(--border); border-radius: 14px; padding: 14px; text-align:center }
+    .kpi b { font-size: 1.3rem }
+    .section { padding: 36px 0 }
+    .cards { display:grid; gap: 16px }
+    @media (min-width: 720px){ .cards { grid-template-columns: repeat(3, 1fr) } }
+    .foot { border-top:1px solid var(--border); padding: 28px 0; color: var(--muted); text-align:center }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace }
+    .icon { width: 20px; height: 20px; vertical-align: -3px }
+    .row { display:flex; flex-wrap: wrap; gap: 12px; align-items:center }
+    .input, textarea {
+      width: 100%; padding: .75rem .9rem; border-radius: 12px; background:#0b1220; border:1px solid var(--border);
+      color: var(--text)
+    }
+    textarea { min-height: 140px; resize: vertical }
+    form .row > * { flex: 1 1 260px }
+    .tag { background:#0d1526; border:1px solid var(--border); padding:.45rem .6rem; border-radius:9999px; font-size:.85rem; color:var(--muted) }
+    .list { display:grid; gap: 8px }
+    .list li { display:flex; align-items:center; gap:8px; color:var(--muted) }
+    .ok { color: var(--ok) }
+    .warn { color: var(--warn) }
+    .err { color: var(--err) }
+    .pill { border:1px dashed var(--border); padding:.5rem .7rem; border-radius:9999px; color:var(--muted) }
+    .spacer { height: 14px }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div id="branding">
-                <h1><span class="highlight">HealthCare</span> Hospital</h1>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <div id="home" class="section">
-
-        <h1>Welcome to HealthCare Hospital 4</h1>
-
-        <div class="section-content">
-            <p>Welcome to HealthCare Hospital, a place where we care about your health as much as you do. Our state-of-the-art facilities and experienced staff are dedicated to providing you with the best medical care and support.</p>
-            <p>From general health check-ups to advanced surgical procedures, we offer a wide range of medical services to meet the diverse needs ofour patients. Our commitment to excellence and patient care makes us one of the leading hospitals in the region.</p>
-        </div>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#"><span>my</span>devopslife</a>
+      <nav aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#blog">Blog</a>
+        <a href="#contact">Contact</a>
+      </nav>
     </div>
+  </header>
 
-    <div id="services" class="section">
-        <h1>Our Services</h1>
-        <div class="section-content">
-            <p>Our hospital offers a comprehensive range of medical services including:</p>
-            <ul>
-                <li>General Medicine and Family Care</li>
-                <li>Emergency and Trauma Services</li>
-                <li>Specialized Surgery</li>
-                <li>Pediatrics and Neonatal Care</li>
-                <li>Cardiology and Neurology</li>
-                <li>Orthopedics</li>
-                <li>Oncology</li>
-                <li>Rehabilitation Services</li>
-            </ul>
-            <p>We are equipped with the latest medical technology and staffed by a team of highly skilled healthcare professionals committed to providing personalized care.</p>
+  <main>
+    <!-- Hero -->
+    <section class="hero container grid grid-2">
+      <div>
+        <h1>Building reliable <span style="color:var(--brand)">Cloud</span> platforms & elegant <span style="color:var(--brand-2)">DevOps</span> automation</h1>
+        <p class="lead">I design, automate, and support scalable infrastructure with <b>Terraform</b>, <b>Docker</b>, <b>Kubernetes</b>, and <b>CI/CD</b>. This is my home for write‑ups, labs, and real‑world tips from the trenches.</p>
+        <div class="row">
+          <a class="btn" href="#contact" aria-label="Hire me">Hire Me
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="M7 17L17 7M7 7h10v10"/></svg>
+          </a>
+          <a class="btn secondary" href="#projects">View Projects</a>
+          <span class="pill mono">Denver · Remote‑friendly</span>
         </div>
-    </div>
-
-    <div id="about" class="section">
-        <h1>About Us</h1>
-        <div class="section-content">
-            <p>HealthCare Hospital has been serving the community for over two decades, offering exceptional medical care to patients of all ages. Our hospital is known for its patient-centered approach, state-of-the-art facilities, and a commitment to maintaining the highest standards of medicalexcellence.</p>
-            <p>Our team of doctors, nurses, and administrative staff works tirelessly to ensure that each patient receives the best possible care ina comfortable and welcoming environment.</p>
+        <div class="kpis">
+          <div class="kpi"><div class="mono ok">99.9%</div><b>Uptime</b></div>
+          <div class="kpi"><div class="mono warn">-40%</div><b>MTTR</b></div>
+          <div class="kpi"><div class="mono">50+ </div><b>Deploys/mo</b></div>
         </div>
-    </div>
+      </div>
+      <div class="card">
+        <h2 class="mono">Fast Start — IaC Lab</h2>
+        <p class="lead">Spin up a three‑tier demo on AWS using Terraform & GitHub Actions.</p>
+        <ul class="list">
+          <li><svg class="icon ok" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="M5 13l4 4L19 7"/></svg> Reproducible VPC, subnets, routes</li>
+          <li><svg class="icon ok" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="M5 13l4 4L19 7"/></svg> Auto‑scaling app tier + ALB</li>
+          <li><svg class="icon ok" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="M5 13l4 4L19 7"/></svg> S3 + CloudFront for static</li>
+        </ul>
+        <div class="spacer"></div>
+        <a class="btn" href="#projects">Explore the repo
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </section>
 
-    <div id="contact" class="section">
-        <h1>Contact Us</h1>
-        <div class="section-content">
-            <p>If you have any questions or need to schedule an appointment, please contact us:</p>
-            <p><strong>Phone:</strong> 1-800-555-1234</p>
-            <p><strong>Email:</strong> contact@healthcarehospital.com</p>
-            <p><strong>Address:</strong> 123 Health St, Wellness City, HC 12345</p>
-            <p>Our dedicated staff is here to assist you with your healthcare needs.</p>
+    <!-- About -->
+    <section id="about" class="section">
+      <div class="container grid grid-2">
+        <div>
+          <h2>About Me</h2>
+          <p class="lead">Hi, I’m <b>Hadia Noor</b> — Cloud & DevOps engineer. I automate deployments, improve reliability, and support developer teams through clear documentation and collaboration.</p>
+          <div class="stack">
+            <span class="chip mono">Terraform</span>
+            <span class="chip mono">Docker</span>
+            <span class="chip mono">Kubernetes</span>
+            <span class="chip mono">AWS</span>
+            <span class="chip mono">Azure</span>
+            <span class="chip mono">GitHub Actions</span>
+            <span class="chip mono">Jenkins</span>
+            <span class="chip mono">Bash/Python</span>
+          </div>
         </div>
-    </div>
+        <div class="card">
+          <h3 class="mono">Highlights</h3>
+          <ul class="list">
+            <li><svg class="icon ok" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="M5 13l4 4L19 7"/></svg> Accomplished faster incident recovery, by isolating faults with SQL/Kibana/CloudWatch, leading to reduced MTTR.</li>
+            <li><svg class="icon ok" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="M5 13l4 4L19 7"/></svg> Accomplished consistent releases, by building CI/CD in GitHub Actions and Terraform, leading to predictable deploys.</li>
+            <li><svg class="icon ok" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="M5 13l4 4L19 7"/></svg> Accomplished stronger team enablement, by writing wikis/runbooks, leading to quicker onboarding & fewer escalations.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
+    <!-- Projects -->
+    <section id="projects" class="section">
+      <div class="container">
+        <h2>Projects</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>Prod CDN on S3 + CloudFront (OAC)</h3>
+            <p class="lead">Accomplished low‑latency static delivery, by fronting S3 with CloudFront using Origin Access Control, leading to secure, fast global access.</p>
+            <div class="stack"><span class="tag">S3</span><span class="tag">CloudFront</span><span class="tag">OAC</span><span class="tag">Terraform</span></div>
+          </article>
+          <article class="card">
+            <h3>Three‑tier AWS with IaC</h3>
+            <p class="lead">Accomplished reproducible infra, by codifying VPC, subnets, ASG & ALB, leading to dependable environments & faster onboarding.</p>
+            <div class="stack"><span class="tag">VPC</span><span class="tag">ALB</span><span class="tag">ASG</span><span class="tag">RDS</span></div>
+          </article>
+          <article class="card">
+            <h3>CI/CD with GitHub Actions</h3>
+            <p class="lead">Accomplished safer deployments, by implementing build/test/deploy workflows with approvals, leading to quicker feedback & fewer regressions.</p>
+            <div class="stack"><span class="tag">CI</span><span class="tag">CD</span><span class="tag">GH Actions</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blog -->
+    <section id="blog" class="section">
+      <div class="container">
+        <h2>Latest Posts</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>Zero‑to‑CDN with CloudFront OAC</h3>
+            <p class="lead">A step‑by‑step on securing S3 origins and caching static assets the right way.</p>
+            <span class="tag mono">Read time: 6 min</span>
+          </article>
+          <article class="card">
+            <h3>Terraform Tips: State & Workspaces</h3>
+            <p class="lead">How to structure state and avoid common pitfalls when teams grow.</p>
+            <span class="tag mono">Read time: 7 min</span>
+          </article>
+          <article class="card">
+            <h3>GitHub Actions: Fast Feedback</h3>
+            <p class="lead">Smarter matrices, caching, and environment protections for safer rollouts.</p>
+            <span class="tag mono">Read time: 5 min</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section">
+      <div class="container grid grid-2">
+        <div>
+          <h2>Let’s work together</h2>
+          <p class="lead">Have a role, project, or collaboration in mind? Drop a note—I'll get back within 1–2 business days.</p>
+          <div class="list" role="list">
+            <div class="row"><span class="tag mono">Email</span><a href="mailto:hadianoor16@gmail.com">hadianoor16@gmail.com</a></div>
+            <div class="row"><span class="tag mono">LinkedIn</span><a href="https://linkedin.com/in/hadianoor/" target="_blank" rel="noreferrer">linkedin.com/in/hadianoor/</a></div>
+            <div class="row"><span class="tag mono">GitHub</span><a href="https://github.com/hadia-noor16" target="_blank" rel="noreferrer">github.com/hadia-noor16</a></div>
+          </div>
+        </div>
+        <form class="card" method="post" action="https://formspree.io/f/your-id" onsubmit="thanks(event)">
+          <h3 class="mono">Quick message</h3>
+          <div class="row">
+            <input class="input" name="name" placeholder="Your name" required />
+            <input class="input" name="email" type="email" placeholder="Email" required />
+          </div>
+          <div class="spacer"></div>
+          <textarea name="message" placeholder="Tell me about your project…" required></textarea>
+          <div class="spacer"></div>
+          <button class="btn" type="submit">Send</button>
+          <p id="thanks" class="lead" style="display:none;margin-top:10px;color:var(--ok)">Thanks! I’ll reply soon.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="container">© <span id="year"></span> My DevOps Life · Built with accessible, semantic HTML + CSS</div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    function thanks(e){ e.preventDefault(); document.getElementById('thanks').style.display='block'; setTimeout(()=>e.target.reset(), 400) }
+  </script>
 </body>
 </html>
