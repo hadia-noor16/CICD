@@ -55,7 +55,7 @@ resource "aws_s3_bucket_website_configuration" "dev_s3_website_configuration" {
 
 # This block is uploading the files to the (dev) s3 bucket.
 
-resource "aws_s3_object" "dev_s3_files" {
+/*resource "aws_s3_object" "dev_s3_files" {
   bucket = aws_s3_bucket.hadia_dev_s3.id
 
   for_each = {
@@ -74,6 +74,7 @@ resource "aws_s3_object" "dev_s3_files" {
   source       = each.value.source_path
   content_type = each.value.content_type
 }
+*/
   
 # Configuring public access settings for the (dev) s3 bucket
 
@@ -126,7 +127,7 @@ resource "aws_s3_bucket_website_configuration" "pro_s3_website_configuration" {
 
 # This block is uploading the files to the (prod) s3 bucket.
 
-resource "aws_s3_object" "pro_s3_files" {
+/*resource "aws_s3_object" "pro_s3_files" {
   bucket = aws_s3_bucket.hadia_pro_s3.id
 
   for_each = {
@@ -144,7 +145,7 @@ resource "aws_s3_object" "pro_s3_files" {
   key          = each.key
   source       = each.value.source_path
   content_type = each.value.content_type
-}
+} */
 
 # Configuring public access settings for the (prod) s3 bucket
 
@@ -360,8 +361,23 @@ resource "aws_codebuild_project" "project" {
   source {
     type      = "GITHUB"
     location  = "https://github.com/hadia-noor16/CICD/website"
-    buildspec = "buildspec.yml"  
-  }
+    buildspec = <<-YAML
+    version: 0.2
+    phases:
+      build:
+        commands:
+           - echo "This is build phase"
+ 
+      post_build:
+        commands:
+           - echo "Deployed to S3"
+    artifacts:
+      base-directory: website
+      files:
+        - '**/*'
+YAML
+}
+
   artifacts {
     type = "S3"
     location = aws_s3_bucket.artifacts.id
@@ -466,7 +482,9 @@ data "aws_iam_policy_document" "codepipeline_policy" {
 
     resources = [
       aws_s3_bucket.artifacts.arn,
-      "${aws_s3_bucket.artifacts.arn}/*"
+      "${aws_s3_bucket.artifacts.arn}/*",
+      aws_s3_bucket.hadia_dev_s3.arn,
+      "${aws_s3_bucket.hadia_dev_s3.arn}/*"
     ]
   }
 
