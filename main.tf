@@ -157,7 +157,8 @@ resource "aws_s3_bucket_public_access_block" "pro_s3_public_access_block"{
   restrict_public_buckets = false
 }
 
-resource "aws_cloudfront_origin_access_control" "oac" {
+# Creating CF distribution to serve prod bucket contents
+/*resource "aws_cloudfront_origin_access_control" "oac" {
   name                              = "${var.pro_bucket}-oac"
   description                       = "OAC for ${var.pro_bucket}"
   origin_access_control_origin_type = "s3"
@@ -257,7 +258,7 @@ viewer_certificate {
     cloudfront_default_certificate = true
   }
 }
-
+*/
 # s3 srtifacts bucket for ci/cd pipeline
 resource "aws_s3_bucket" "artifacts" {
   bucket = "hn-artifacts123"
@@ -341,7 +342,7 @@ data "aws_iam_policy_document" "example" {
       "codeconnections:GetConnectionToken",
       "codeconnections:GetConnection"
     ]
-    resources = ["arn:aws:codeconnections:us-east-1:957196010799:connection/05fcb4eb-3c4f-42d6-910a-b6474474cdd6"]
+    resources = [var.github_connector]
   }
 }
 
@@ -372,9 +373,9 @@ resource "aws_codebuild_project" "project" {
         commands:
            - echo "Deployed to S3"
     artifacts:
-      base-directory: website
+      base-directory: website    # take files from website/ i.e. only contents from website folder is copied to dev bucket
       files:
-        - '**/*'
+        - '**/*'                 # include everything from website/ folder
 YAML
 }
 
