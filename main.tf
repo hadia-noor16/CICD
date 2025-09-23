@@ -376,7 +376,7 @@ resource "aws_codebuild_project" "project" {
     artifacts:
       base-directory: website    # take files from website/ i.e. only contents from website folder is copied to dev bucket
       files:
-                  # include everything from website/ folder
+        -"**/*"        # include everything from website/ folder
 YAML
 }
 
