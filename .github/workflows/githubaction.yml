@@ -17,7 +17,7 @@ jobs:
       - name: Configure AWS (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: var.aws_region  # <-- your region
+          aws-region: "us-east-1"  # <-- your region
           role-to-assume: arn:aws:iam::957196010799:role/codepipeline-oidc-role
 
       - name: Trigger CodePipeline
