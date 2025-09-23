@@ -414,6 +414,7 @@ artifact_store {
         ConnectionArn = var.github_connector  # create variable and save the connector name in .tfvars file
         FullRepositoryId = "hadia-noor16/CICD"  # Update with your GitHub repo name
         BranchName = "main"  # Specify the branch
+        DetectChanges    = "false" 
       }
     }
   }
