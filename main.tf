@@ -355,7 +355,7 @@ resource "aws_iam_role_policy" "example" {
 
 # CI/CD Build phase with github repo as source, defining where build project artifacts go to in s3 bucket, and the specs of server to run this task
 
-/*
+
 resource "aws_codebuild_project" "project" {
   name          = "my-codebuild-project"
   description   = "Build project for my website"
@@ -511,4 +511,4 @@ data "aws_iam_policy_document" "codepipeline_policy" {
 resource "aws_iam_role_policy" "codepipelinerole" {
   role   = aws_iam_role.codepipelinerole.name
   policy = data.aws_iam_policy_document.codepipeline_policy.json
-} */
+} 
