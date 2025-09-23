@@ -412,7 +412,7 @@ artifact_store {
       output_artifacts = ["source_output"]
       configuration = {
         ConnectionArn = var.github_connector  # create variable and save the connector name in .tfvars file
-        FullRepositoryId = "hadia-noor16/CICD"  # Update with your GitHub repo name
+        FullRepositoryId = "hadia-noor16/CICD/website"  # Update with your GitHub repo name
         BranchName = "main"  # Specify the branch
       }
     }
