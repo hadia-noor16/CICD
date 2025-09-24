@@ -19,3 +19,17 @@ variable "aws_region" {
 variable "github_connector" {
   type= string
 }
+
+variable "approval_email" {
+  description = "Email to notify for manual approvals"
+  type        = string
+}
+
+variable "domain_name" {
+  type= string
+  default= "mydevopslife.com."
+}
+
+variable "zone_id" {
+  type= string
+}
