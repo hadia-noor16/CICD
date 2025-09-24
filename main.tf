@@ -352,10 +352,7 @@ resource "aws_iam_role_policy" "example" {
 }
 
 
-
 # CI/CD Build phase with github repo as source, defining where build project artifacts go to in s3 bucket, and the specs of server to run this task
-
-
 resource "aws_codebuild_project" "project" {
   name          = "my-codebuild-project"
   description   = "Build project for my website"
@@ -376,7 +373,7 @@ resource "aws_codebuild_project" "project" {
     artifacts:
       base-directory: website    # take files from website/ i.e. only contents from website folder is copied to dev bucket
       files:
-        -"**/*"        # include everything from website/ folder
+        -'**/*'        # include everything from website/ folder
 YAML
 }
 
@@ -391,7 +388,6 @@ YAML
     image_pull_credentials_type = "CODEBUILD"
  }
 }
-
 
 
 # Code pipeline with source, build, and deploy stage (to s3 dev bucket)
