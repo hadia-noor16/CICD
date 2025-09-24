@@ -373,7 +373,8 @@ resource "aws_codebuild_project" "project" {
     artifacts:
       base-directory: website    # take files from website/ i.e. only contents from website folder is copied to dev bucket
       files:
-        -'**/*'        # include everything from website/ folder
+        - '**/*' 
+               # include everything from website/ folder
 YAML
 }
 
@@ -381,6 +382,8 @@ YAML
     type = "S3"
     location = aws_s3_bucket.artifacts.id
   }
+
+
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
     image                       = "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
