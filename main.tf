@@ -158,7 +158,7 @@ resource "aws_s3_bucket_public_access_block" "pro_s3_public_access_block"{
 }
 
 # Creating CF distribution to serve prod bucket contents
-/*resource "aws_cloudfront_origin_access_control" "oac" {
+resource "aws_cloudfront_origin_access_control" "oac" {
   name                              = "${var.pro_bucket}-oac"
   description                       = "OAC for ${var.pro_bucket}"
   origin_access_control_origin_type = "s3"
@@ -258,7 +258,7 @@ viewer_certificate {
     cloudfront_default_certificate = true
   }
 }
-*/
+
 # s3 srtifacts bucket for ci/cd pipeline
 resource "aws_s3_bucket" "artifacts" {
   bucket = "hn-artifacts123"
@@ -448,6 +448,52 @@ artifact_store {
       }
     }
   }
+
+  #  Manual approval gate before PROD
+  stage {
+    name = "ApproveProd"
+    action {
+      name      = "ManualApproval"
+      category  = "Approval"
+      owner     = "AWS"
+      provider  = "Manual"
+      version   = "1"
+      configuration = {
+        CustomData       = "Approve deploy to S3 PROD bucket?"
+        NotificationArn  = aws_sns_topic.codepipeline_approvals.arn
+    
+      }
+    }
+  }
+
+  # --- NEW: Deploy to PROD S3 (after approval) ---
+  stage {
+    name = "DeployProd"
+    action {
+      name            = "DeployToProd"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "S3"
+      version         = "1"
+      input_artifacts = ["build_output"]   # same artifact from Build stage
+      configuration = {
+        BucketName = var.pro_bucket
+        Extract    = "true"
+      }
+    }
+  }
+}
+
+resource "aws_sns_topic" "codepipeline_approvals" {
+  name = "codepipeline-approvals"
+}
+
+# Email subscription for approval notifications (optional)
+resource "aws_sns_topic_subscription" "approver_email" {
+  count     = var.approval_email == null ? 0 : 1
+  topic_arn = aws_sns_topic.codepipeline_approvals.arn
+  protocol  = "email"
+  endpoint  = var.approval_email
 }
 
 # CodePipeline role
@@ -506,8 +552,40 @@ data "aws_iam_policy_document" "codepipeline_policy" {
 
     resources = ["*"]
   }
+  statement {
+    effect = "Allow"
+    actions = ["sns:Publish"]
+    resources = [aws_sns_topic.codepipeline_approvals.arn]
+  }
 }
 resource "aws_iam_role_policy" "codepipelinerole" {
   role   = aws_iam_role.codepipelinerole.name
   policy = data.aws_iam_policy_document.codepipeline_policy.json
 } 
+
+
+# A record (IPv4)
+resource "aws_route53_record" "a_alias" {
+  zone_id = var.zone_id
+  name    = "mydevopslife.com"
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.s3_distribution.domain_name
+    zone_id =              aws_cloudfront_distribution.s3_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+# AAAA record (IPv6) – optional but recommended
+resource "aws_route53_record" "aaaa_alias" {
+  zone_id = var.zone_id
+  name    = "www.mydevopslife.com"
+  type    = "AAAA"
+
+  alias {
+    name                   = aws_cloudfront_distribution.s3_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.s3_distribution.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
