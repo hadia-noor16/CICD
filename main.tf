@@ -52,29 +52,6 @@ resource "aws_s3_bucket_website_configuration" "dev_s3_website_configuration" {
     key = "error.html"
   }
 }
-
-# This block is uploading the files to the (dev) s3 bucket.
-
-/*resource "aws_s3_object" "dev_s3_files" {
-  bucket = aws_s3_bucket.hadia_dev_s3.id
-
-  for_each = {
-    "index.html" = {
-      key          = "index.html"
-      source_path  = "website/index.html"
-      content_type = "text/html"
-    }
-    "error.html" = {
-      key          = "error.html"
-      source_path  = "website/error.html"
-      content_type = "text/html"
-    }
-  }
-  key          = each.key
-  source       = each.value.source_path
-  content_type = each.value.content_type
-}
-*/
   
 # Configuring public access settings for the (dev) s3 bucket
 
@@ -125,28 +102,6 @@ resource "aws_s3_bucket_website_configuration" "pro_s3_website_configuration" {
   }
 }
 
-# This block is uploading the files to the (prod) s3 bucket.
-
-/*resource "aws_s3_object" "pro_s3_files" {
-  bucket = aws_s3_bucket.hadia_pro_s3.id
-
-  for_each = {
-    "index.html" = {
-      key          = "index.html"
-      source_path  = "website/index.html"
-      content_type = "text/html"
-    }
-    "error.html" = {
-      key          = "error.html"
-      source_path  = "website/error.html"
-      content_type = "text/html"
-    }
-  }
-  key          = each.key
-  source       = each.value.source_path
-  content_type = each.value.content_type
-} */
-
 # Configuring public access settings for the (prod) s3 bucket
 
 resource "aws_s3_bucket_public_access_block" "pro_s3_public_access_block"{
@@ -164,76 +119,35 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
-}
 
+}
 resource "aws_cloudfront_distribution" "s3_distribution" {
 # This will define the origin which is the s3 bucket
 origin {
     origin_id                = "s3-${var.pro_bucket}"
     domain_name = "${aws_s3_bucket.hadia_pro_s3.bucket_regional_domain_name}"
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
+    
 }
 
+
 # Enable the distribution and configure basic settings
-enabled             = true
+  enabled             = true
   is_ipv6_enabled     = true
   comment             = "mydevopslife"
   default_root_object = "index.html"
 
-
-
-# Default cache behavior settings
-default_cache_behavior {
+    default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "s3-${var.pro_bucket}"
-
-# The settings for forwarding requests
 forwarded_values {
       query_string = false
 cookies {
         forward = "none"
       }
     }
-viewer_protocol_policy = "allow-all"
     min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
-  }
-  
-# Cache behavior with precedence 0
-  ordered_cache_behavior {
-    path_pattern     = "/content/immutable/*"
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD", "OPTIONS"]
-    target_origin_id = "s3-${var.pro_bucket}"
-forwarded_values {
-      query_string = false
-      headers      = ["Origin"]
-cookies {
-        forward = "none"
-      }
-    }
-min_ttl                = 0
-    default_ttl            = 86400
-    max_ttl                = 31536000
-    compress               = true
-    viewer_protocol_policy = "allow-all"
-  }
-  
-# Cache behavior with precedence 1
-  ordered_cache_behavior {
-    path_pattern     = "/content/*"
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id  = "s3-${var.pro_bucket}"
-forwarded_values {
-      query_string = false
-cookies {
-        forward = "none"
-      }
-    }
-min_ttl                = 0
     default_ttl            = 3600
     max_ttl                = 86400
     compress             = true
@@ -250,14 +164,21 @@ restrictions {
   }
 tags = {
     Environment = "production"
-  }
+  } 
+
+  aliases= ["mydevopslife.com", "www.mydevopslife.com"]
 
 # SSL/TLS cerificate settings
 
 viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn      = "arn:aws:acm:us-east-1:957196010799:certificate/0b2aa022-e7e8-4e72-a658-2283c70caf46"
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
+
 }
+
+
 
 # s3 srtifacts bucket for ci/cd pipeline
 resource "aws_s3_bucket" "artifacts" {
@@ -354,8 +275,8 @@ resource "aws_iam_role_policy" "example" {
 
 # CI/CD Build phase with github repo as source, defining where build project artifacts go to in s3 bucket, and the specs of server to run this task
 resource "aws_codebuild_project" "project" {
-  name          = "my-codebuild-project"
-  description   = "Build project for my website"
+  name          = "tf-codebuild-project"
+  description   = "Build project for my portfolio"
   service_role  = aws_iam_role.example.arn
   source {
     type      = "GITHUB"
@@ -395,7 +316,7 @@ YAML
 
 # Code pipeline with source, build, and deploy stage (to s3 dev bucket)
 resource "aws_codepipeline" "pipeline" {
-  name     = "my-pipeline"
+  name     = "tf-pipeline"
   role_arn = aws_iam_role.codepipelinerole.arn
 artifact_store {
     location = aws_s3_bucket.artifacts.id
@@ -566,7 +487,7 @@ resource "aws_iam_role_policy" "codepipelinerole" {
   policy = data.aws_iam_policy_document.codepipeline_policy.json
 } 
 
-
+# Route 53 record to serve the cloudfornt distribution
 # A record (IPv4)
 resource "aws_route53_record" "a_alias" {
   zone_id = var.zone_id
