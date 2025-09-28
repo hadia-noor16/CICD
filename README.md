@@ -14,27 +14,27 @@ This project demonstrate the automated deployment of infrastructure by following
 
 **Architecture Overview**
 **Infrastructure Components**
-1. CI/CD Pipeline
+**1. CI/CD Pipeline**
    . Integrated with GitHub repository.
    . CodeBuild stage.
    . CodePipeline (To streamline the CI/CD pipeline)
    . Deploying website to Dev S3 bucket.
    . SNS subscription (via email) for production approval.
    
-2. S3
+**2. S3**
    . Artifacts S3 bucket shared by source, build, and deploy stage.
    . Remote S3 with DynamoDb for state locking.
    
-3. AWS IAM
+**3. AWS IAM**
    . Service role creation for pipeline with required permissions.
    . Access keys for IAM user.
 
-4. CloudFront
+**4. CloudFront**
    . Origin Access Control in place to by pass direct access to S3 prod bucket.
    . Redirect all HTTP content to HTTPs.
    . SSL/TLS certificate from Amazon Certificate Manager.
    
-5. Route 53
+**5. Route 53**
    . Personal domain with Alias records serving CloudFront content.
 
 
