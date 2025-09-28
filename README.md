@@ -15,8 +15,8 @@ This project demonstrate the automated deployment of infrastructure by following
 **Architecture Overview**
 **Infrastructure Components**
 **1. CI/CD Pipeline**
-   . Integrated with GitHub repository.
-   . CodeBuild stage.
+   1. Integrated with GitHub repository.
+   2. CodeBuild stage.
    . CodePipeline (To streamline the CI/CD pipeline)
    . Deploying website to Dev S3 bucket.
    . SNS subscription (via email) for production approval.
