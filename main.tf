@@ -370,7 +370,7 @@ artifact_store {
     }
   }
 
-  #  Manual approval gate before PROD
+  #  Manual approval stage before PROD
   stage {
     name = "ApproveProd"
     action {
@@ -387,7 +387,7 @@ artifact_store {
     }
   }
 
-  # --- NEW: Deploy to PROD S3 (after approval) ---
+  # Deploy to PROD S3 (after approval)
   stage {
     name = "DeployProd"
     action {
