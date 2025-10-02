@@ -18,6 +18,7 @@ terraform{
 # The s3 bucket for the (dev) environment.
 resource "aws_s3_bucket" "hadia_dev_s3" {
   bucket = var.dev_bucket
+  force_destroy = true
 }
 
 # The policy for the (dev) s3 buket to allow public read access.
@@ -67,6 +68,7 @@ resource "aws_s3_bucket_public_access_block" "dev_s3_public_access_block"{
   
 resource "aws_s3_bucket" "hadia_pro_s3" {
   bucket = var.pro_bucket
+  force_destroy = true
 }
 
 # Policy for the (prod) s3 bucket to allow public read access
@@ -182,7 +184,8 @@ viewer_certificate {
 
 # s3 srtifacts bucket for ci/cd pipeline
 resource "aws_s3_bucket" "artifacts" {
-  bucket = "hn-artifacts123"
+  bucket = var.artifact_bucket
+  force_destroy = true
 }
 resource "aws_s3_bucket_ownership_controls" "owner" {
   bucket = aws_s3_bucket.artifacts.id
