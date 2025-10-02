@@ -10,6 +10,12 @@ variable "pro_bucket" {
   default     = "hadiaprod.123"
 }
 
+variable "artifact_bucket" {
+  description = "This is the name of the production bucket for HealthCare North"
+  type        = string
+  default     = "hn-artifacts123"
+}
+
 variable "aws_region" {
   description = "This is the main region where the resources for HealthCare North will be deployed"
   type        = string
