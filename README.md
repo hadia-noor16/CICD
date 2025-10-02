@@ -55,6 +55,11 @@ This project demonstrate the automated deployment of infrastructure by following
 https://github.com/hadia-noor16/CICD
 
 
+# Step-by-Step Guide
+
+https://medium.com/@hadianoor16/automated-deployment-of-ci-cd-pipeline-via-terraform-9d553d94b83b
+
+
 
 
 
