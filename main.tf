@@ -173,7 +173,7 @@ tags = {
 # SSL/TLS cerificate settings
 
 viewer_certificate {
-    acm_certificate_arn      = "arn:aws:acm:us-east-1:957196010799:certificate/0b2aa022-e7e8-4e72-a658-2283c70caf46"
+    acm_certificate_arn      = var.certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2021"
   }
@@ -504,7 +504,7 @@ resource "aws_route53_record" "a_alias" {
   }
 }
 
-# AAAA record (IPv6) – optional but recommended
+# AAAA record (IPv6)
 resource "aws_route53_record" "aaaa_alias" {
   zone_id = var.zone_id
   name    = "www.mydevopslife.com"
