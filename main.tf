@@ -414,11 +414,12 @@ resource "aws_sns_topic" "codepipeline_approvals" {
 
 # Email subscription for approval notifications (optional)
 resource "aws_sns_topic_subscription" "approver_email" {
-  count     = var.approval_email == null ? 0 : 1
+  #count     = var.approval_email == null ? 0 : 1
   topic_arn = aws_sns_topic.codepipeline_approvals.arn
   protocol  = "email"
   endpoint  = var.approval_email
 }
+
 
 # CodePipeline role
 

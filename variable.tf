@@ -41,5 +41,5 @@ variable "certificate_arn"{
 
 variable "approval_email" {
   type= string
-  default = "hadianoor16@gmail.com"
+  default = null
 }
